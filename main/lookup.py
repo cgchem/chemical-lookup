@@ -92,7 +92,16 @@ def read_from_ftp(link):
 
 def names_to_synonyms(als):
 
+    out = []
+
     ftp = GetFTPLink(BuildQuery([str(x) for x in als]))
     res = read_from_ftp(ftp)
 
-    return res
+    for q in als:
+        out.append((q, res[q]))  # a list of tuples (name, [list_of_synonyms])
+        # have to do it this way rather than just return the dict because the user might have submitted a list with
+        # duplicates. And if we drop dupes, then the output list will be a different length to the input list which
+        # will screw up the 1:1 mapping of columns in a spreadsheet
+
+    # return res  # a dict of name: synonym (OLD METHOD)
+    return out

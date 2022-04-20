@@ -27,7 +27,9 @@ def begin():
 
         query = request.form['qry']
         qries = [sanitize(z) for z in query.split("\n")]
-        results = names_to_synonyms(qries)  # a dict of id: list of identifiers
+        results = names_to_synonyms(qries)
+        # OLD: a dict of id: list of identifiers
+        # NEW: a list of tuples (name, [list of identifiers])
 
         # results = {"1":["cake", "bread"], "2":["apples", "pears"]}
 
