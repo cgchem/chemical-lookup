@@ -3,3 +3,4 @@
 *.log
 *.png
 instance/config.py
+run.bat

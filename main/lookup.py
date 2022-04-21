@@ -4,6 +4,27 @@ import requests
 import urllib
 from collections import defaultdict
 from main.xml import *
+import re
+
+
+def is_cas_valid(astr):
+    a, b, c = astr.split("-")
+    tot = 0
+    for x, y in enumerate("x" + (a + b)[::-1]):
+        if x == 0:
+            continue
+        tot += x * int(y)
+    checksum = tot % 10
+    if checksum == int(c):
+        return True
+    else:
+        return False
+
+
+def iscas(astr):
+    if re.match("[0-9]+-[0-9]+-[0-9]$", astr):
+        return True
+    return False
 
 
 def GetFTPLink(query_text):
@@ -84,8 +105,9 @@ def read_from_ftp(link):
                 a, b = (line.split("\t"))
             except ValueError:
                 # couldn't split a line which means probably we just got an empty file
-                return out
-            out[a].append(b)
+                return
+            if not iscas(b):  # no sense re-adding the CAS number we searched with
+                out[a].append(b)
 
     return out
 
